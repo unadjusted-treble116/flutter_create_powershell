@@ -24,5 +24,5 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/flutter-create.ps1
+          files: dist/flutter_create.ps1
           generate_release_notes: true
