@@ -132,6 +132,12 @@ You can freely copy the `flutter_create.ps1` and run it inside the powershell.
 
 ---
 
+## Star the Project
+
+If you find Flutter Create PowerShell useful, consider giving the repository a **star** on GitHub. It helps the project get noticed and lets me know that the tool is useful to others. Also you will be notified about any new updates to the project.
+
+---
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
