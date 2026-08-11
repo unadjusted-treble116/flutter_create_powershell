@@ -1,5 +1,9 @@
 # Flutter Create PowerShell
 
+<p align="center">
+  <img src="assets/image.png" alt="TUI Screenshot" width="700">
+</p>
+
 An interactive PowerShell wrapper around Flutter's `flutter create` command.
 
 Instead of remembering and typing a long list of Flutter CLI flags, Flutter Create PowerShell provides an interactive terminal UI for configuring a new Flutter project — including its name, location, template, platforms, Android language, and advanced creation options.
