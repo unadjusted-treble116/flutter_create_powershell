@@ -26,9 +26,9 @@ Write-Header "Flutter Project Wizard"
 Write-Hint "Using Flutter executable found at: $flutterPath"
 
 $project.Name = Read-ValidatedInput `
-    -Prompt "Project Name (lowercase, starts with a letter; alphanumeric and underscores only)" `
+    -Prompt "Project Name (e.g., my_awesome_app)" `
     -Validator { param($v) $v -cmatch '^[a-z][a-z0-9_]*$' } `
-    -ErrorMessage "Must be a valid Dart package name (e.g., my_awesome_app)." `
+    -ErrorMessage "Use lowercase letters, numbers, and underscores. The name must start with a letter." `
     -AllowEmpty $false
 
 Write-Host ""
@@ -48,15 +48,15 @@ $project.Description = Read-ValidatedInput `
     -ErrorMessage ""
 
 $project.Organization = Read-ValidatedInput `
-    -Prompt "Organization Reverse Domain (e.g., com.example) (Optional)" `
+    -Prompt "Organization ID (e.g., com.example, used for package and bundle identifiers) (Optional)" `
     -Validator {
         param($v)
         if ([string]::IsNullOrWhiteSpace($v)) { return $true }
         return ($v -match '^([a-zA-Z0-9]+\.)+[a-zA-Z0-9]+$')
     } `
-    -ErrorMessage "Invalid organization format. Use standard dot notation (e.g., dev.domain)."
+    -ErrorMessage "Use reverse-domain notation such as com.example or dev.mycompany."
 
-$project.Template = Show-Menu "Select Template Type" @(
+$project.Template = Show-Menu "What type of Flutter project do you want to create?" @(
     "app",
     "module",
     "package",
@@ -67,24 +67,24 @@ $project.Template = Show-Menu "Select Template Type" @(
 
 $project.Empty = $false
 if ($project.Template -eq "app") {
-    $emptyChoice = Show-Menu "Create Empty Boilerplate App? (Removes comments & counters)" @("Yes","No")
+    $emptyChoice = Show-Menu "Create an Empty App Template? (Minimal main.dart with no sample comments or counters)" @("Yes","No")
     $project.Empty = ($emptyChoice -eq "Yes")
 }
 
 $project.AndroidLanguage = ""
 if ($project.Template -eq "app" -or $project.Template -eq "plugin") {
-    $project.AndroidLanguage = Show-Menu "Target Android Language" @("kotlin","java")
+    $project.AndroidLanguage = Show-Menu "Android Native Code Language (Kotlin recommended)" @("kotlin","java")
 }
 
 $project.Platforms = @()
 if ($project.Template -eq "app" -or $project.Template -eq "plugin") {
     $project.Platforms = Show-CheckboxMenu `
-        -Title "Target Platform Selection" `
+        -Title "Select Target Platforms (folders will be generated for these platforms)" `
         -Items @("android","ios","web","windows","linux","macos") `
         -Selected @("android","ios","web","windows","linux","macos")
 }
 
-$advanced = Show-Menu "Configure Advanced Flag Options?" @("No","Yes")
+$advanced = Show-Menu "Configure Advanced Creation Options? (pub get, offline mode, overwrite)" @("No","Yes")
 
 $project.RunPubGet = $true
 $project.Offline = $false
