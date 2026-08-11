@@ -76,13 +76,13 @@ The easiest way to use the tool is to download the latest standalone script from
 Download:
 
 ```text
-flutter-create.ps1
+flutter_create.ps1
 ```
 
 Run it from PowerShell:
 
 ```powershell
-.\flutter-create.ps1
+.\flutter_create.ps1
 ```
 
 ---
@@ -93,13 +93,13 @@ If you want to build the standalone script yourself, clone the repository:
 
 ```powershell
 git clone <repository-url>
-cd flutter-create-powershell
+cd flutter_create-powershell
 ```
 
 The source is organized as:
 
 ```text
-flutter-create-powershell/
+flutter_create-powershell/
 │
 ├── src/
 │   ├── main.ps1
@@ -126,7 +126,7 @@ Run the build script:
 The resulting standalone script will be generated at:
 
 ```text
-dist/flutter-create.ps1
+dist/flutter_create.ps1
 ```
 You can freely copy the `flutter_create.ps1` and run it inside the powershell.
 
