@@ -22,7 +22,11 @@ if (-not $flutterPath) {
     Clean-Exit 1
 }
 
-Write-Header "Flutter Project Wizard"
+Write-Header "
+░█▀▀░█░░░█░█░▀█▀░▀█▀░█▀▀░█▀▄░░█▀▀░█▀▄░█▀▀░█▀█░▀█▀░█▀▀░
+░█▀▀░█░░░█░█░░█░░░█░░█▀▀░█▀▄░░█░░░█▀▄░█▀▀░█▀█░░█░░█▀▀░
+░▀░░░▀▀▀░▀▀▀░░▀░░░▀░░▀▀▀░▀░▀░░▀▀▀░▀░▀░▀▀▀░▀░▀░░▀░░▀▀▀░
+"
 Write-Hint "Using Flutter executable found at: $flutterPath"
 
 $project.Name = Read-ValidatedInput `

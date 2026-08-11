@@ -5,7 +5,7 @@ $Source = Join-Path $Root "src"
 $Parts = Join-Path $Source "parts"
 $Dist = Join-Path $Root "dist"
 
-$OutputFile = Join-Path $Dist "flutter-create.ps1"
+$OutputFile = Join-Path $Dist "flutter_create.ps1"
 
 $Files = @(
     (Join-Path $Parts "config.ps1")
