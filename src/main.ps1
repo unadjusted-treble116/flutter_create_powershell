@@ -1,7 +1,7 @@
-. "$PSScriptRoot\config.ps1"
-. "$PSScriptRoot\ui.ps1"
-. "$PSScriptRoot\menus.ps1"
-. "$PSScriptRoot\flutter.ps1"
+. "$PSScriptRoot\parts\config.ps1"
+. "$PSScriptRoot\parts\ui.ps1"
+. "$PSScriptRoot\parts\menus.ps1"
+. "$PSScriptRoot\parts\flutter.ps1"
 
 $project = ProjectConfig
 
@@ -10,17 +10,17 @@ $Host.UI.RawUI.WindowTitle = "Flutter Project Wizard"
 $originalForegroundColor = $Host.UI.RawUI.ForegroundColor
 $originalBackgroundColor = $Host.UI.RawUI.BackgroundColor
 
-$ui = [CurrentUserProvider]::new() 2>$null
-[system.management.automation.runtime.eventsArgs] 2>$null
 [Console]::TreatControlCAsInput = $true
 
-function Test-Flutter {
-    $cmd = Get-Command flutter -ErrorAction SilentlyContinue
-    if (-not $cmd) { return $null }
-    return $cmd.Source
-}
-
 Clear-Host
+
+$flutterPath = Test-Flutter
+
+if (-not $flutterPath) {
+    Write-ErrorMsg "CRITICAL: Flutter SDK was not found in your system PATH."
+    Write-Hint "Please install Flutter and ensure 'flutter/bin' is added to your Environment Variables."
+    Clean-Exit 1
+}
 
 Write-Header "Flutter Project Wizard"
 Write-Hint "Using Flutter executable found at: $flutterPath"
@@ -145,7 +145,7 @@ if ($project.Organization) {
 }
 Write-Host ""
 
-Write-Host "Safe Generated Command Execution Blueprint:" -ForegroundColor Cyan
+Write-Host "Flutter Command Preview:" -ForegroundColor Cyan
 Write-Host "flutter $($cmdArgs -join ' ')" -ForegroundColor Yellow
 Write-Host ""
 
