@@ -26,12 +26,14 @@ Write-Header "Flutter Project Wizard"
 Write-Hint "Using Flutter executable found at: $flutterPath"
 
 $project.Name = Read-ValidatedInput `
-    -Prompt "Project Name (lowercase, alphanumeric, and underscores only)" `
+    -Prompt "Project Name (lowercase, starts with a letter; alphanumeric and underscores only)" `
     -Validator { param($v) $v -cmatch '^[a-z][a-z0-9_]*$' } `
     -ErrorMessage "Must be a valid Dart package name (e.g., my_awesome_app)." `
     -AllowEmpty $false
 
-$project.OutputDirectory = Read-Host "Output Directory (Leave empty for current directory)"
+Write-Host ""
+Write-Host "Output Directory (Optional, leave blank for current directory):" -ForegroundColor Yellow
+$project.OutputDirectory = Read-Host ">"
 if ($project.OutputDirectory) {
     $project.OutputDirectory = Convert-Path -Path $project.OutputDirectory -ErrorAction SilentlyContinue -DefaultValue $project.OutputDirectory
     if (-not (Test-Path $project.OutputDirectory)) {
@@ -132,27 +134,16 @@ $targetPath = if ($project.OutputDirectory) {
 $cmdArgs += $targetPath
 
 Clear-Host
-Write-Header "Project Specification Summary"
 
-Write-Host "Project Name     : " -NoNewline; Write-Host $project.Name -ForegroundColor Green
-Write-Host "Target Path      : " -NoNewline; Write-Host $targetPath -ForegroundColor Green
-Write-Host "Template Type    : " -NoNewline; Write-Host $project.Template -ForegroundColor Green
-if ($project.Platforms.Count -gt 0) {
-    Write-Host "Platforms        : " -NoNewline; Write-Host ($project.Platforms -join ', ') -ForegroundColor Green
-}
-if ($project.Organization) {
-    Write-Host "Organization     : " -NoNewline; Write-Host $project.Organization -ForegroundColor Green
-}
-Write-Host ""
+Show-ProjectSummary `
+    -Project $project `
+    -TargetPath $targetPath `
+    -CommandArguments $cmdArgs
 
-Write-Host "Flutter Command Preview:" -ForegroundColor Cyan
-Write-Host "flutter $($cmdArgs -join ' ')" -ForegroundColor Yellow
-Write-Host ""
-
-Write-Host "Type YES to execute and initialize workspace:" -ForegroundColor Red
+Write-Host "Create this project? (Y/N):" -ForegroundColor Green
 $confirm = Read-Host ">"
 
-if ($confirm -ne "YES") {
+if ($confirm -ne "Y" -and $confirm -ne "y") {
     Write-ErrorMsg "Operation terminated by user request."
     Clean-Exit 0
 }
