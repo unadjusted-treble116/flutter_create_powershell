@@ -1,5 +1,9 @@
 # flutter_init.ps1
 
+. "$PSScriptRoot\src\config.ps1"
+
+$project = ProjectConfig
+
 $Host.UI.RawUI.WindowTitle = "Flutter Project Wizard"
 
 $originalForegroundColor = $Host.UI.RawUI.ForegroundColor
@@ -165,27 +169,27 @@ if (-not $flutterPath) {
 Write-Header "Flutter Project Wizard"
 Write-Hint "Using Flutter executable found at: $flutterPath"
 
-$projectName = Read-ValidatedInput `
+$project.Name = Read-ValidatedInput `
     -Prompt "Project Name (lowercase, alphanumeric, and underscores only)" `
     -Validator { param($v) $v -match '^[a-z][a-z0-9_]*$' } `
     -ErrorMessage "Must be a valid Dart package name (e.g., my_awesome_app)." `
     -AllowEmpty $false
 
-$outputDir = Read-Host "Output Directory (Leave empty for current directory)"
-if ($outputDir) {
-    $outputDir = Convert-Path -Path $outputDir -ErrorAction SilentlyContinue -DefaultValue $outputDir
-    if (-not (Test-Path $outputDir)) {
+$project.OutputDirectory = Read-Host "Output Directory (Leave empty for current directory)"
+if ($project.OutputDirectory) {
+    $project.OutputDirectory = Convert-Path -Path $project.OutputDirectory -ErrorAction SilentlyContinue -DefaultValue $project.OutputDirectory
+    if (-not (Test-Path $project.OutputDirectory)) {
         Write-Host "Target folder directory doesn't exist. Creating it now..." -ForegroundColor DarkGray
-        $null = New-Item -ItemType Directory -Path $outputDir -Force
+        $null = New-Item -ItemType Directory -Path $project.OutputDirectory -Force
     }
 }
 
-$description = Read-ValidatedInput `
+$project.Description = Read-ValidatedInput `
     -Prompt "Project Description (Optional)" `
     -Validator { $true } `
     -ErrorMessage ""
 
-$org = Read-ValidatedInput `
+$project.Organization = Read-ValidatedInput `
     -Prompt "Organization Reverse Domain (e.g., com.example) (Optional)" `
     -Validator {
         param($v)
@@ -194,7 +198,7 @@ $org = Read-ValidatedInput `
     } `
     -ErrorMessage "Invalid organization format. Use standard dot notation (e.g., dev.domain)."
 
-$template = Show-Menu "Select Template Type" @(
+$project.Template = Show-Menu "Select Template Type" @(
     "app",
     "module",
     "package",
@@ -203,20 +207,20 @@ $template = Show-Menu "Select Template Type" @(
     "skeleton"
 )
 
-$empty = $false
-if ($template -eq "app") {
+$project.Empty = $false
+if ($project.Template -eq "app") {
     $emptyChoice = Show-Menu "Create Empty Boilerplate App? (Removes comments & counters)" @("Yes","No")
-    $empty = ($emptyChoice -eq "Yes")
+    $project.Empty = ($emptyChoice -eq "Yes")
 }
 
-$androidLanguage = ""
-if ($template -eq "app" -or $template -eq "plugin") {
-    $androidLanguage = Show-Menu "Target Android Language" @("kotlin","java")
+$project.AndroidLanguage = ""
+if ($project.Template -eq "app" -or $project.Template -eq "plugin") {
+    $project.AndroidLanguage = Show-Menu "Target Android Language" @("kotlin","java")
 }
 
-$platforms = @()
-if ($template -eq "app" -or $template -eq "plugin") {
-    $platforms = Show-CheckboxMenu `
+$project.Platforms = @()
+if ($project.Template -eq "app" -or $project.Template -eq "plugin") {
+    $project.Platforms = Show-CheckboxMenu `
         -Title "Target Platform Selection" `
         -Items @("android","ios","web","windows","linux","macos") `
         -Selected @("android","ios","web","windows","linux","macos")
@@ -224,14 +228,14 @@ if ($template -eq "app" -or $template -eq "plugin") {
 
 $advanced = Show-Menu "Configure Advanced Flag Options?" @("No","Yes")
 
-$pub = $true
-$offline = $false
-$overwrite = $false
+$project.RunPubGet = $true
+$project.Offline = $false
+$project.Overwrite = $false
 
 if ($advanced -eq "Yes") {
-    $pub = ((Show-Menu "Automatically run 'flutter pub get' after creation?" @("Yes","No")) -eq "Yes")
-    $offline = ((Show-Menu "Offline Mode? (Use cached packages only)" @("Yes","No")) -eq "Yes")
-    $overwrite = ((Show-Menu "Force overwrite if files already exist?" @("Yes","No")) -eq "Yes")
+    $project.RunPubGet = ((Show-Menu "Automatically run 'flutter pub get' after creation?" @("Yes","No")) -eq "Yes")
+    $project.Offline = ((Show-Menu "Offline Mode? (Use cached packages only)" @("Yes","No")) -eq "Yes")
+    $project.Overwrite = ((Show-Menu "Force overwrite if files already exist?" @("Yes","No")) -eq "Yes")
 }
 
 $cmdArgs = @("create")
@@ -246,22 +250,22 @@ if ($org) {
     $cmdArgs += @("--org", $org)
 }
 
-if ($androidLanguage) {
-    $cmdArgs += @("--android-language", $androidLanguage)
+if ($project.AndroidLanguage) {
+    $cmdArgs += @("--android-language", $project.AndroidLanguage)
 }
 
-if ($platforms.Count -gt 0) {
-    $cmdArgs += @("--platforms", ($platforms -join ","))
+if ($project.Platforms.Count -gt 0) {
+    $cmdArgs += @("--platforms", ($project.Platforms -join ","))
 }
 
-if ($template) {
-    $cmdArgs += @("--template", $template)
+if ($project.Template) {
+    $cmdArgs += @("--template", $project.Template)
 }
 
-if ($empty) { $cmdArgs += "--empty" }
-if (-not $pub) { $cmdArgs += "--no-pub" }
-if ($offline) { $cmdArgs += "--offline" }
-if ($overwrite) { $cmdArgs += "--overwrite" }
+if ($project.Empty) { $cmdArgs += "--empty" }
+if (-not $project.RunPubGet) { $cmdArgs += "--no-pub" }
+if ($project.Offline) { $cmdArgs += "--offline" }
+if ($project.Overwrite) { $cmdArgs += "--overwrite" }
 
 $targetPath = if ($outputDir) {
     Join-Path $outputDir $projectName
@@ -276,9 +280,9 @@ Write-Header "Project Specification Summary"
 
 Write-Host "Project Name     : " -NoNewline; Write-Host $projectName -ForegroundColor Green
 Write-Host "Target Path      : " -NoNewline; Write-Host $targetPath -ForegroundColor Green
-Write-Host "Template Type    : " -NoNewline; Write-Host $template -ForegroundColor Green
-if ($platforms.Count -gt 0) {
-    Write-Host "Platforms        : " -NoNewline; Write-Host ($platforms -join ', ') -ForegroundColor Green
+Write-Host "Template Type    : " -NoNewline; Write-Host $project.Template -ForegroundColor Green
+if ($project.Platforms.Count -gt 0) {
+    Write-Host "Platforms        : " -NoNewline; Write-Host ($project.Platforms -join ', ') -ForegroundColor Green
 }
 if ($org) {
     Write-Host "Organization     : " -NoNewline; Write-Host $org -ForegroundColor Green
